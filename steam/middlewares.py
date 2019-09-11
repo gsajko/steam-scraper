@@ -11,6 +11,7 @@ from w3lib.url import url_query_cleaner
 from scrapy.dupefilters import RFPDupeFilter
 from scrapy.downloadermiddlewares.redirect import RedirectMiddleware
 
+
 class SteamDupeFilter(RFPDupeFilter):
     def request_fingerprint(self, request):
         url = url_query_cleaner(request.url, ['snr'], remove=True)

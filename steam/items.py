@@ -28,6 +28,9 @@ def str_to_int(x):
         return x
     
 class ProductItem(scrapy.Item):
+    url = scrapy.Field()
+    reviews_url = scrapy.Field()
+    id = scrapy.Field()
     app_name = scrapy.Field() #A basic field that saves its data using the default_output_processor
     specs = scrapy.Field(
         output_processor=MapCompose(StripText()) #A field with a customized output processor. MapCompose is one of a few processors included with Scrapy
