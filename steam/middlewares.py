@@ -9,6 +9,7 @@ from scrapy import signals
 
 from w3lib.url import url_query_cleaner
 from scrapy.dupefilters import RFPDupeFilter
+from scrapy.downloadermiddlewares.redirect import RedirectMiddleware
 
 class SteamDupeFilter(RFPDupeFilter):
     def request_fingerprint(self, request):
@@ -16,7 +17,20 @@ class SteamDupeFilter(RFPDupeFilter):
         request = request.replace(url=url)
         return super().request_fingerprint(request)
 
+class CircumventAgeCheckMiddleware(RedirectMiddleware):
+    def _redirect(self, redirected, request, spider, reason):
+        # Only overrule the default redirect behavior
+        # in the case of mature content checkpoints.
+        if not re.findall('app/(.*)/agecheck', redirected.url):
+            return super()._redirect(redirected, request, spider, reason)
 
+        logger.debug(f"Button-type age check triggered for {request.url}.")
+
+        return Request(url=request.url,
+                       cookies={'mature_content': '1'},
+                       meta={'dont_cache': True},
+                       callback=spider.parse_product)
+        
 class SteamSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
