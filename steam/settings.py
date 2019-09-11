@@ -90,3 +90,4 @@ HTTPCACHE_EXPIRATION_SECS = 0 # Never expire.
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 DUPEFILTER_CLASS = 'steam.middlewares.SteamDupeFilter'
+CLOSESPIDER_ERRORCOUNT = 1
